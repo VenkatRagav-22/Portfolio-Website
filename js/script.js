@@ -1,6 +1,5 @@
-// Reveal animations on scroll
+// Scroll animations
 const faders = document.querySelectorAll(".fade-in");
-
 const appearOnScroll = new IntersectionObserver(
   (entries, observer) => {
     entries.forEach((entry) => {
@@ -11,13 +10,11 @@ const appearOnScroll = new IntersectionObserver(
   },
   { threshold: 0.2 }
 );
-
 faders.forEach((fade) => appearOnScroll.observe(fade));
 
 // Copy email to clipboard
 const emailItem = document.querySelector(".copy-email");
 const feedback = document.getElementById("copy-feedback");
-
 if (emailItem) {
   emailItem.addEventListener("click", () => {
     const email = emailItem.dataset.email;
@@ -28,15 +25,6 @@ if (emailItem) {
   });
 }
 
-// Scroll to top when logo is clicked
-const logo = document.querySelector(".logo");
-if (logo) {
-  logo.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-}
-
 // Smooth scroll for nav links
 document.querySelectorAll(".nav-links a").forEach((link) => {
   link.addEventListener("click", function (e) {
@@ -44,28 +32,53 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
     const targetId = this.getAttribute("href");
     const target = document.querySelector(targetId);
     if (target) {
-      window.scrollTo({
-        top: target.offsetTop - 60, // offset for navbar height
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: target.offsetTop - 60, behavior: "smooth" });
     }
+    const navLinks = document.querySelector(".nav-links");
+    navLinks.classList.remove("active");
+    document.querySelector(".hamburger").classList.remove("active");
   });
 });
 
+// Hamburger menu
 const hamburger = document.querySelector(".hamburger");
 const navLinks = document.querySelector(".nav-links");
-
 if (hamburger && navLinks) {
   hamburger.addEventListener("click", () => {
     navLinks.classList.toggle("active");
-    hamburger.classList.toggle("active"); // animate hamburger to X
+    hamburger.classList.toggle("active");
   });
+}
+// Typewriter animation for About Me
+function typeWriter(element, text, delay = 30) {
+  let index = 0;
+  element.textContent = ""; // clear existing content
+  function type() {
+    if (index < text.length) {
+      element.textContent += text.charAt(index);
+      index++;
+      setTimeout(type, delay);
+    } else {
+      element.style.borderRight = "none"; // remove cursor after typing
+    }
+  }
+  type();
+}
 
-  // Close menu when a link is clicked
-  document.querySelectorAll(".nav-links a").forEach((link) => {
-    link.addEventListener("click", () => {
-      navLinks.classList.remove("active");
-      hamburger.classList.remove("active");
-    });
-  });
+const aboutBox = document.querySelector(".about-box");
+if (aboutBox) {
+  aboutBox.dataset.text =
+    "Web Designer & Developer with a growing focus on UI/UX. Skilled in front-end development and crafting responsive, user-friendly websites with clean and thoughtful design.";
+  const aboutObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          typeWriter(aboutBox, aboutBox.dataset.text, 30);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+  aboutObserver.observe(aboutBox);
 }
