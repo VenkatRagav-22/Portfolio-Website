@@ -435,3 +435,7 @@ h3 {
   font-size: 1.4rem;
   margin-bottom: 15px;
 }
+
+* {
+  cursor: default;
+}
