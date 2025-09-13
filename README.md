@@ -10,8 +10,7 @@ Welcome to my personal portfolio! A **sleek, modern, and interactive web experie
 
 ## 🚀 Live Site
 
-🌐 [View Portfolio Live](https://your-username.github.io/your-repo-name/)  
-*(Replace this link after uploading to GitHub)*
+🌐 [View Portfolio Live]([https://your-username.github.io/your-repo-name/](https://venkatragav-22.github.io/Portfolio-Website/))  
 
 ---
 
@@ -49,7 +48,6 @@ Hi! I’m **Venkat Ragav**, a UI/UX designer and web developer passionate about 
 ## 🔗 Connect with Me
 
 - 💬 [LinkedIn](https://www.linkedin.com/in/venkatragav/)  
-- 📧 Email: [venkatragav2207@gmail.com](mailto:venkatragav2207@gmail.com)  
 - 💻 [GitHub](https://github.com/VenkatRagav-22)  
 - 📸 [Instagram](https://www.instagram.com/venkatragav)  
 
