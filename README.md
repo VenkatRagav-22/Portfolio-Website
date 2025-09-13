@@ -48,7 +48,6 @@ Hi! I’m **Venkat Ragav**, a UI/UX designer and web developer passionate about 
 ## 🔗 Connect with Me
 
 - 💬 [LinkedIn](https://www.linkedin.com/in/venkatragav/)  
-- 📧 [Email](venkatragav2207@gmail.com)  
 - 💻 [GitHub](https://github.com/VenkatRagav-22)  
 - 📸 [Instagram](https://www.instagram.com/venkatragav)  
 
