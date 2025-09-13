@@ -68,7 +68,7 @@ function typeWriter(element, text, delay = 30) {
 const aboutBox = document.querySelector(".about-box");
 if (aboutBox) {
   aboutBox.dataset.text =
-    "Web Designer & Developer with a growing focus on UI/UX. Skilled in front-end development and crafting responsive, user-friendly websites with clean and thoughtful design.";
+    "UI/UX Designer & Frontend Developer with a growing focus on UI/UX. Skilled in front-end development and crafting responsive, user-friendly websites with clean and thoughtful design.";
   const aboutObserver = new IntersectionObserver(
     (entries, observer) => {
       entries.forEach((entry) => {

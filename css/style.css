@@ -12,7 +12,7 @@
 /* General */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 0;
 }
 body {
   margin: 0;
@@ -105,6 +105,12 @@ body {
 .hero-right {
   text-align: center;
 }
+/* Reduce space above hero */
+.hero.section {
+  padding-top: 20px; /* was 80px in .section */
+  padding-bottom: 80px; /* keep bottom same if you want */
+}
+
 .big-name {
   font-family: "Montserrat", sans-serif;
   font-size: 4rem;
@@ -125,6 +131,13 @@ body {
   color: #b8860b;
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+#role1{
+  color: #918e8e;
+  font-family: "Poiret One", sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
 }
 .hero-buttons a {
   display: inline-block;
