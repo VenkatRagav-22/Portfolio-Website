@@ -35,7 +35,8 @@
       background: radial-gradient(1200px 600px at 50% -10%, #1a1a1a, #000);
       background-color: #000;
       color: #eaeaea;
-      overflow-x: hidden;
+      /* Removed overflow-x: hidden globally to prevent alignment shifts on desktop */
+      width: 100%;
       line-height: 1.6;
       cursor: default;
     }
@@ -57,7 +58,7 @@
       list-style: none;
     }
 
-    img {
+    img, video {
       max-width: 100%;
       display: block;
     }
@@ -71,8 +72,8 @@
       display: flex;
       justify-content: center;
       padding: 0 20px;
-      opacity: 0; /* Hidden initially for animation */
-      transform: translateY(-20px);
+      /* Ensure no transform affects fixed position centering */
+      transform: none !important; 
     }
 
     .nav-center {
@@ -149,10 +150,12 @@
       text-align: center;
       padding: 120px 24px 60px;
       position: relative;
+      width: 100%; /* Fix alignment */
     }
 
     .hero-content {
       max-width: 900px;
+      width: 100%;
       z-index: 2;
     }
 
@@ -165,16 +168,19 @@
       background: linear-gradient(to bottom right, #ffffff 30%, #999 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      
+      /* FAILSAFE: Ensure visibility by default. 
+         Opacity 0 is handled by JS. If JS fails, text remains visible (fallback) */
+      opacity: 1; 
     }
 
     .hero-subtitle {
       max-width: 580px;
-      margin: 0 auto 80px; /* INCREASED FROM 40px TO 80px FOR MORE SPACE */
+      margin: 0 auto 80px;
       color: #999;
       font-size: 18px;
       font-weight: 300;
-      opacity: 0; /* Hidden initially for animation */
-      transform: translateY(20px);
+      opacity: 0; /* JS Animation will handle this */
     }
 
     /* --- SCROLL INDICATOR --- */
@@ -186,7 +192,7 @@
       cursor: pointer;
       z-index: 10;
       padding: 20px;
-      opacity: 0; /* Hidden for animation */
+      opacity: 0; /* JS Animation */
     }
 
     .scroll-indicator {
@@ -221,7 +227,9 @@
     .section {
       padding: 120px 24px;
       max-width: 1200px;
-      margin: 0 auto;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
     }
 
     .section-header {
@@ -249,6 +257,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
       gap: 40px;
+      width: 100%;
     }
 
     .card {
@@ -262,7 +271,6 @@
       display: flex;
       flex-direction: column;
       opacity: 0; /* JS Animation */
-      transform: translateY(30px);
     }
 
     .card:hover {
@@ -328,14 +336,14 @@
     }
     
     .card-badge {
-        display: inline-block;
-        padding: 4px 10px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 12px;
-        font-size: 11px;
-        color: #ccc;
-        margin-bottom: 12px;
-        align-self: flex-start;
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      font-size: 11px;
+      color: #ccc;
+      margin-bottom: 12px;
+      align-self: flex-start;
     }
 
     /* --- ABOUT (NEW SPLIT SECTION) --- */
@@ -347,9 +355,16 @@
     }
 
     .about-image-col {
+      opacity: 0; 
+      display: flex;
+      justify-content: flex-start; 
+    }
+
+    .about-img-frame {
       position: relative;
-      opacity: 0; /* JS Animation */
-      transform: translateX(-30px);
+      width: fit-content;
+      border-radius: 24px;
+      overflow: hidden; 
     }
 
     .about-image {
@@ -358,36 +373,32 @@
       aspect-ratio: 4/5;
       object-fit: cover;
       border-radius: 24px;
-      /* Image Filters for "old photo" feel */
       filter: grayscale(100%) sepia(0.2) contrast(1.1) brightness(0.9);
       transition: filter 0.5s ease;
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      display: block; 
     }
 
-    .about-image:hover {
-      filter: grayscale(0%) sepia(0) contrast(1) brightness(1); /* Full color on hover */
+    .about-img-frame:hover .about-image {
+      filter: grayscale(0%) sepia(0) contrast(1) brightness(1);
     }
     
-    /* Custom texture overlay using pseudo-element */
-    .about-image-col::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        max-width: 450px;
-        border-radius: 24px;
-        /* Subtle noise texture using gradient */
-        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj4KICA8ZmlsdGVyIGlkPSJuIj4KICAgIDxmZXR1cmVOb2lzZSB0eXBlPSJmcmFjdGFsVHVyYnVsZW5jZSIgYmFzZUZyZXF1ZW5jeT0iMSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPgogICAgPGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIgcmVzdWx0PSJzYXR1cmFhdGlvbiIvPgogIDwvZmlsdGVyPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InRyYW5zcGFyZW50IiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuMDMiLz4KPC9zdmc+');
-        pointer-events: none;
-        mix-blend-mode: soft-light;
-        transition: opacity 0.5s ease;
+    .about-img-frame::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj4KICA8ZmlsdGVyIGlkPSJuIj4KICAgIDxmZXR1cmVOb2lzZSB0eXBlPSJmcmFjdGFsVHVyYnVsZW5jZSIgYmFzZUZyZXF1ZW5jeT0iMSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPgogICAgPGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIgcmVzdWx0PSJzYXR1cmFhdGlvbiIvPgogIDwvZmlsdGVyPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InRyYW5zcGFyZW50IiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuMDMiLz4KPC9zdmc+');
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+      transition: opacity 0.5s ease;
     }
 
     .about-text-col {
-      opacity: 0; /* JS Animation */
-      transform: translateX(30px);
+      opacity: 0; 
       padding-top: 20px;
     }
 
@@ -405,26 +416,26 @@
     }
     
     .skills-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
     }
     
     .skill-pill {
-        padding: 8px 16px;
-        border: 1px solid rgba(255,255,255,0.15);
-        border-radius: 100px;
-        color: #ccc;
-        font-size: 14px;
-        transition: all 0.2s;
-        cursor: default;
+      padding: 8px 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      color: #ccc;
+      font-size: 14px;
+      transition: all 0.2s;
+      cursor: default;
     }
     
     .skill-pill:hover {
-        background: rgba(255,255,255,0.1);
-        border-color: #fff;
-        color: #fff;
+      background: rgba(255,255,255,0.1);
+      border-color: #fff;
+      color: #fff;
     }
 
     @media (max-width: 900px) {
@@ -434,8 +445,8 @@
       }
       .about-image-col {
         order: -1;
-        display: flex;
         justify-content: center;
+        align-items: center;
       }
     }
 
@@ -452,11 +463,11 @@
       border-bottom: 1px solid rgba(255,255,255,0.08);
       padding: 40px 0;
       transition: background 0.3s;
-      opacity: 0; /* JS Animation */
+      opacity: 0;
     }
     
     .exp-item:first-child {
-        border-top: 1px solid rgba(255,255,255,0.08);
+      border-top: 1px solid rgba(255,255,255,0.08);
     }
 
     .exp-main h4 {
@@ -471,18 +482,18 @@
     }
     
     .doc-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        color: #fff;
-        border-bottom: 1px solid #fff;
-        padding-bottom: 2px;
-        margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #fff;
+      border-bottom: 1px solid #fff;
+      padding-bottom: 2px;
+      margin-top: 8px;
     }
     
     .doc-link:hover {
-        opacity: 0.8;
+      opacity: 0.8;
     }
 
     .exp-meta {
@@ -498,13 +509,13 @@
     }
     
     @media (max-width: 768px) {
-        .exp-item {
-            flex-direction: column;
-            gap: 16px;
-        }
-        .exp-meta {
-            text-align: left;
-        }
+      .exp-item {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .exp-meta {
+        text-align: left;
+      }
     }
 
     /* --- CONTACT & FOOTER --- */
@@ -537,85 +548,82 @@
     }
     
     .contact-btn.outline {
-        background: transparent;
-        border: 1px solid rgba(255,255,255,0.2);
-        color: #fff;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
     }
     
     .contact-btn.outline:hover {
-        border-color: #fff;
-        background: transparent;
+      border-color: #fff;
+      background: transparent;
     }
 
-    /* --- FOOTER FIXES --- */
+    /* --- FOOTER --- */
     .footer {
       border-top: 1px solid rgba(255,255,255,0.05);
-      padding: 40px 24px; /* Added horizontal padding for section padding consistency */
-      max-width: 1200px; /* Aligns content with sections */
-      margin: 0 auto; /* Centers the footer content */
+      padding: 40px 24px; 
+      max-width: 1200px;
+      margin: 0 auto;
       color: #444;
       font-size: 14px;
-      /* FIX: Use Flexbox for centering the single item */
       display: flex;
-      justify-content: center; /* Changed from space-between to center */
+      justify-content: center;
       align-items: center;
-      text-align: center; /* Ensures text (if any) is centered */
+      text-align: center;
     }
     
     .footer-right img {
-        height: 75px;
-        opacity: 1;
-        display: block;
+      height: 75px;
+      opacity: 1;
+      display: block;
     }
     
     @media (max-width: 600px) {
-        .footer {
-            flex-direction: column;
-            gap: 16px;
-            text-align: center;
-        }
-        /* Removed .footer-left and .footer-right ordering rules */
+      .footer {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
     }
-    /* --- END FOOTER FIXES --- */
     
     /* --- BACK TO TOP BUTTON --- */
     .back-to-top {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: #fff;
-        color: #000;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease-in-out;
-        z-index: 999;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #fff;
+      color: #000;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 999;
     }
 
     .back-to-top.visible {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
     
     .back-to-top:hover {
-        transform: translateY(-2px) scale(1.05);
+      transform: translateY(-2px) scale(1.05);
     }
     
     @media (max-width: 600px) {
-        .back-to-top {
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-        }
+      .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+      }
     }
 
   </style>
@@ -627,13 +635,11 @@
   <nav class="nav">
     <div class="nav-center">
       <div class="nav-links">
-        <!-- These links are now handled by JS for smooth scroll -->
         <a href="#work">Work</a>
         <a href="#about">About</a>
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
       </div>
-      <!-- Resume Button linked to local file -->
       <a href="./assets/Resume.pdf" target="_blank" class="resume-btn">
         <span>Resume</span>
         <i data-lucide="arrow-up-right" width="14" height="14"></i>
@@ -644,7 +650,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <!-- Title text is here, but JS will split it into words for animation -->
+      <!-- Title text -->
       <h1 class="hero-title">
         “Make it make sense.”
       </h1>
@@ -672,44 +678,44 @@
     <div class="work-grid">
       <!-- UI/UX Projects -->
 
-        <!-- YZF R15M -->
-    <article class="card">
-  <div class="card-image-wrapper">
-    <video
-      class="card-image"
-      src="./assets/r15-hero.mp4"
-      autoplay
-      muted
-      loop
-      playsinline
-      disablepictureinpicture <!-- ADDED THIS ATTRIBUTE -->
-    ></video>
-  </div>
+      <!-- YZF R15M -->
+      <article class="card">
+        <div class="card-image-wrapper">
+          <video
+            class="card-image"
+            src="./assets/r15-hero.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            disablepictureinpicture
+          ></video>
+        </div>
 
-  <div class="card-content">
-    <span class="card-badge">In-Development</span>
+        <div class="card-content">
+          <span class="card-badge">In-Development</span>
 
-    <h3>YZF R15M Landing Page Redesign
-      <i data-lucide="arrow-up-right" class="arrow-icon"></i>
-    </h3>
+          <h3>YZF R15M Landing Page Redesign
+            <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+          </h3>
 
-    <p>
-      A frontend tribute to my favorite bike, focused on modern aesthetics,
-      interaction, and responsive behavior.
-    </p>
-  </div>
-</article>
-    
+          <p>
+            A frontend tribute to my favorite bike, focused on modern aesthetics,
+            interaction, and responsive behavior.
+          </p>
+        </div>
+      </article>
+      
       <article class="card">
         <div class="card-image-wrapper">
           <img src="./assets/srisun.jpg" alt="Srisun Tiles" class="card-image">
         </div>
         <div class="card-content">
-           <div>
-              <span class="card-badge">Web Design</span>
-              <h3>Srisun Tiles <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
-              <p>Homepage design emphasizing visual hierarchy and strong brand presence.</p>
-           </div>
+          <div>
+            <span class="card-badge">Web Design</span>
+            <h3>Srisun Tiles <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+            <p>Homepage design emphasizing visual hierarchy and strong brand presence.</p>
+          </div>
         </div>
       </article>
 
@@ -719,9 +725,9 @@
         </div>
         <div class="card-content">
           <div>
-              <span class="card-badge">UI/UX Design</span>
-              <h3>Illaram Matrimony <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
-              <p>End-to-end UI UX design for a full scale matrimony platform, focusing on trust and ease of use.</p>
+            <span class="card-badge">UI/UX Design</span>
+            <h3>Illaram Matrimony <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+            <p>End-to-end UI UX design for a full scale matrimony platform, focusing on trust and ease of use.</p>
           </div>
         </div>
       </article>
@@ -732,25 +738,31 @@
         </div>
         <div class="card-content">
           <div>
-              <span class="card-badge">App Design</span>
-              <h3>RIFT Sneakers App <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
-              <p>Passion product exploring high-end ecommerce interactions and bold branding.</p>
+            <span class="card-badge">App Design</span>
+            <h3>RIFT Sneakers App <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+            <p>Passion product exploring high-end ecommerce interactions and bold branding.</p>
           </div>
         </div>
       </article>
 
       <!-- Development Projects -->
       
-       <!-- Car Resale Value Prediction -->
+      <!-- Car Resale Value Prediction -->
       <article class="card">
         <div class="card-image-wrapper">
-          <img src="./assets/gtr.jpg" alt="Car Value Prediction" class="card-image">
+          <!-- UPDATED: Added query string ?v=2 to bust GitHub cache -->
+          <img 
+            src="assets/gtr.jpg" 
+            alt="Car Value Prediction" 
+            class="card-image"
+            onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;color:#666;text-align:center;padding:20px;\'>Image not found.<br>Check filename case (gtr.jpg vs GTR.jpg)</div>';"
+          >
         </div>
         <div class="card-content">
           <div>
-              <span class="card-badge">Development</span>
-              <h3>Car Value Prediction <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
-              <p>Predictive modeling techniques to forecast car resale values with high accuracy.</p>
+            <span class="card-badge">Development</span>
+            <h3>Car Value Prediction <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+            <p>Predictive modeling techniques to forecast car resale values with high accuracy.</p>
           </div>
         </div>
       </article>
@@ -762,16 +774,16 @@
         </div>
         <div class="card-content">
           <div>
-              <span class="card-badge">Development</span>
-              <h3>Stock Dashboard <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
-              <p>Interactive dashboard for stock visualization and forecasting indicators.</p>
+            <span class="card-badge">Development</span>
+            <h3>Stock Dashboard <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+            <p>Interactive dashboard for stock visualization and forecasting indicators.</p>
           </div>
         </div>
       </article>
     </div>
   </section>
 
-  <!-- ABOUT SECTION (NEW) -->
+  <!-- ABOUT SECTION -->
   <section id="about" class="section">
     <div class="section-header">
       <span class="section-title">About Me</span>
@@ -779,8 +791,9 @@
     
     <div class="about-wrapper">
       <div class="about-image-col">
-        <!-- Profile image is now styled for a vintage, paper-like feel -->
-        <img src="./assets/profile.jpeg" alt="Venkat Ragav" class="about-image">
+        <div class="about-img-frame">
+          <img src="./assets/profile.jpeg" alt="Venkat Ragav" class="about-image">
+        </div>
       </div>
       
       <div class="about-text-col">
@@ -816,7 +829,6 @@
         <div class="exp-main">
           <h4>UI UX Design Intern</h4>
           <p>Working on live client projects, refining interfaces through iterative feedback loops, and maintaining design systems in Figma.</p>
-          <!-- Internship Doc Link -->
           <a href="./assets/Internship_Doc.pdf" target="_blank" class="doc-link">
             View Document <i data-lucide="file-text" width="14" height="14"></i>
           </a>
@@ -831,7 +843,6 @@
         <div class="exp-main">
           <h4>TNSDC SkillUp Program</h4>
           <p>Advanced web development specialization under the Vetri Nitchyam Scheme, graduating with distinction.</p>
-          <!-- Certificate Link -->
           <a href="./assets/Certificate.pdf" target="_blank" class="doc-link">
             View Certificate <i data-lucide="file-text" width="14" height="14"></i>
           </a>
@@ -860,15 +871,12 @@
     </div>
   </section>
 
-   <!-- FOOTER -->
-   <!-- Updated footer to remove text and center the logo -->
-    <footer class="footer">
-      <!-- Removed footer-left content. Keeping footer-right wrapper for minimal CSS changes. -->
-      <div class="footer-right">
-        <!-- Logo/Signature Image -->
-        <img src="./assets/logo.png" alt="Signature Logo" onerror="this.onerror=null;this.style.display='none';">
-      </div>
-    </footer>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-right">
+      <img src="./assets/logo.png" alt="Signature Logo" onerror="this.onerror=null;this.style.display='none';">
+    </div>
+  </footer>
   
   <!-- BACK TO TOP BUTTON -->
   <div id="backToTopBtn" class="back-to-top" onclick="scrollToTop()">
@@ -885,164 +893,159 @@
     
     const FIXED_NAV_HEIGHT = 80;
 
-    // --- UTILITY: Function to split text into words and wrap them for animation ---
-    function splitTextToSpans(selector) {
+    // --- IMPORTANT: Robust Animation Logic ---
+    // Instead of hiding text via HTML/CSS, we hide it via JS immediately.
+    // If JS fails, text stays visible.
+    
+    // Wait for Fonts to be ready (better than just window.onload)
+    document.fonts.ready.then(() => {
+        initAnimations();
+    });
+
+    function initAnimations() {
+      // --- UTILITY: Function to split text ---
+      function splitTextToSpans(selector) {
         const element = document.querySelector(selector);
         if (!element) return [];
         
-        // Replace <br> tags with a space so they don't break the word splitting
         const text = element.innerHTML.replace(/<br>/g, ' '); 
-        
-        // Split text by space and filter out empty strings
         let words = text.trim().split(/\s+/);
 
-        // Wrap each word in two spans: outer for clipping (overflow: hidden), inner for animation (transform: translateY)
+        // NOTE: We do NOT set translateY(100%) here. We let GSAP do it.
+        // This prevents the "forever hidden" bug.
         let newHTML = words.map(word => 
-            `<span style="display: inline-block; overflow: hidden;"><span style="display: block; transform: translateY(100%);">${word}</span></span>`
+          `<span style="display: inline-block; overflow: hidden; vertical-align: bottom;"><span class="anim-word" style="display: block;">${word}</span></span>`
         ).join(' ');
         
         element.innerHTML = newHTML;
-        
-        // Return the inner span elements that will be animated (the ones with translateY)
-        return element.querySelectorAll('.hero-title > span > span');
-    }
+        return element.querySelectorAll('.anim-word');
+      }
 
-    // --- FIX 1: Smooth Scrolling for Navigation Links ---
-    document.querySelectorAll('.nav-links a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            
-            gsap.to(window, { 
-                duration: 1, 
-                scrollTo: {
-                    y: targetId,
-                    offset: FIXED_NAV_HEIGHT 
-                }, 
-                ease: "power2.inOut" 
-            });
-        });
-    });
+      // 1. Hero Title Animation
+      const heroTitleWords = splitTextToSpans(".hero-title");
+      const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    // --- ANIMATIONS ---
+      heroTl.delay(0.2); 
+      
+      if (heroTitleWords.length > 0) {
+        // Here is the magic: from(y: "100%") -> to(y: "0%")
+        // If GSAP fails, this code doesn't run, and text sits at default 0% (Visible)
+        heroTl.fromTo(heroTitleWords, 
+          { y: "110%", opacity: 0 }, 
+          { y: "0%", opacity: 1, duration: 1.5, stagger: 0.1 }
+        );
+      } else {
+        // Fallback if split fails
+        gsap.to(".hero-title", { opacity: 1, duration: 1 });
+      }
 
-    // 2. Hero Title Staggered Reveal Animation
-    const heroTitleWords = splitTextToSpans(".hero-title");
-
-    // Increased duration and stagger for a cinematic feel
-    const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-    // 1. Initial delay for dramatic pause
-    heroTl.delay(0.8); 
-    
-    // 2. Stagger animation for the words (gliding up slowly, with slight rotation for motion)
-    if (heroTitleWords.length > 0) {
-        heroTl.fromTo(heroTitleWords, {
-            y: "120%", // Start position (hidden below clip)
-            rotation: 2, // Slight rotation for added drama
-            opacity: 0
-        }, {
-            y: "0%", // End position
-            rotation: 0,
-            opacity: 1,
-            duration: 1.5, // Slow duration
-            stagger: 0.1, // Increased stagger delay
-        });
-    }
-
-    // 3. Subtitle Reveal (Slower Fade-in/Up)
-    heroTl.fromTo(".hero-subtitle", 
+      // 2. Subtitle Reveal
+      heroTl.fromTo(".hero-subtitle", 
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 
-        "-=0.8" // Overlap with the end of the title animation
-    );
+        "-=1.0" 
+      );
 
-    // 4. Navbar Reveal (Starts slightly before the main title animation finishes)
-    heroTl.to(".nav", {
-        opacity: 1,
-        y: 0,
-        duration: 1.2,
-        ease: "power3.out"
-    }, "-=1.0"); // Overlap with the main title sequence
+      // 3. Navbar Reveal
+      heroTl.fromTo(".nav", 
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }, 
+        "-=1.2"
+      );
 
-    // 5. Scroll Indicator Fade In
-    heroTl.fromTo("#scrollDownBtn", 
+      // 4. Scroll Indicator Fade In
+      heroTl.fromTo("#scrollDownBtn", 
         { opacity: 0 },
         { opacity: 1, duration: 1.5 }, 
-        "-=0.6" // Overlap further
-    );
-          
-    // 6. Scroll Down Functionality (Updated to use GSAP for smoothness)
-    document.getElementById('scrollDownBtn').addEventListener('click', () => {
-      gsap.to(window, { 
+        "-=0.6" 
+      );
+      
+      // 5. Section Headers Reveal
+      gsap.utils.toArray('.section-header').forEach(header => {
+        gsap.fromTo(header, 
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: header,
+              start: "top 85%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      });
+
+      // 6. Card Stagger Animation
+      gsap.utils.toArray('.card').forEach((card, i) => {
+        gsap.fromTo(card, 
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: i * 0.1, 
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+            }
+          }
+        );
+      });
+
+      // 7. Text/List Reveal
+      const revealElements = gsap.utils.toArray('.exp-item, .about-text-col, .about-image-col');
+      revealElements.forEach(el => {
+        gsap.fromTo(el, 
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+            }
+          }
+        );
+      });
+    }
+
+    // --- NAVIGATION LOGIC ---
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        gsap.to(window, { 
           duration: 1, 
           scrollTo: {
-              y: "#work",
-              offset: FIXED_NAV_HEIGHT
+            y: targetId,
+            offset: FIXED_NAV_HEIGHT 
           }, 
           ease: "power2.inOut" 
+        });
       });
     });
 
-    // 7. Section Headers Reveal (Kept same for consistency)
-    gsap.utils.toArray('.section-header').forEach(header => {
-      gsap.fromTo(header, 
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          scrollTrigger: {
-            trigger: header,
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
+    document.getElementById('scrollDownBtn').addEventListener('click', () => {
+      gsap.to(window, { 
+        duration: 1, 
+        scrollTo: {
+          y: "#work",
+          offset: FIXED_NAV_HEIGHT
+        }, 
+        ease: "power2.inOut" 
+      });
     });
 
-    // 8. Card Stagger Animation (Kept same for consistency)
-    gsap.utils.toArray('.card').forEach((card, i) => {
-      gsap.fromTo(card, 
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          delay: i * 0.1, // Stagger effect
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-          }
-        }
-      );
-    });
-
-    // 9. Text/List Reveal (Kept same for consistency)
-    const revealElements = gsap.utils.toArray('.exp-item, .about-text-col, .about-image-col');
-    revealElements.forEach(el => {
-      gsap.fromTo(el, 
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-          }
-        }
-      );
-    });
-    
-    // 10. Back to Top Functionality
+    // --- BACK TO TOP & CONTACT LOGIC ---
     const backToTopBtn = document.getElementById('backToTopBtn');
     
     function scrollToTop() {
       gsap.to(window, { duration: 1, scrollTo: 0, ease: "power2.inOut" });
     }
     
-    // Show/Hide Back to Top button based on scroll position
     window.addEventListener('scroll', () => {
       if (window.scrollY > 400) {
         backToTopBtn.classList.add('visible');
@@ -1051,26 +1054,23 @@
       }
     });
 
-    // phone redirect
     const phoneNumber = "8667076522";
-  const contactBtn = document.getElementById("contactBtn");
+    const contactBtn = document.getElementById("contactBtn");
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  contactBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    if (isMobile) {
-      window.location.href = "https://wa.me/91" + phoneNumber;
-    } else {
-      navigator.clipboard.writeText(phoneNumber).then(() => {
-        contactBtn.innerText = "Number copied";
-        setTimeout(() => {
-          contactBtn.innerText = "Call me";
-        }, 2000);
-      });
-    }
-  });
+    contactBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (isMobile) {
+        window.location.href = "https://wa.me/91" + phoneNumber;
+      } else {
+        navigator.clipboard.writeText(phoneNumber).then(() => {
+          contactBtn.innerText = "Number copied";
+          setTimeout(() => {
+            contactBtn.innerText = "Call me";
+          }, 2000);
+        });
+      }
+    });
 
   </script>
 </body>
