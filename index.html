@@ -1,221 +1,1077 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Venkat Ragav</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Segoe UI", sans-serif;
-        background-color: #ffffff;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venkat Ragav · UI UX Designer</title>
 
-      .navbar-brand-outline {
-        border: 2px solid #333;
-        color: #333;
-        padding: 5px 14px;
-        border-radius: 15px;
-        font-weight: bold;
-        font-size: 1.3rem;
-        letter-spacing: 1px;
-        transition: all 0.3s ease;
-      }
+  <!-- FONTS: Inter & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-      .navbar-brand-outline:hover {
-        border-color: #0d6efd;
-        color: #0d6efd;
-      }
+  <!-- ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-      .nav-link {
-        font-weight: 500;
-        color: #333 !important;
-        position: relative;
-      }
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollToPlugin.min.js"></script>
 
-      .nav-link:hover {
-        color: #0d6efd !important;
-      }
+  <style>
+    /* --- RESET & BASE --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      .nav-link::after {
-        content: "";
+    html {
+      scroll-behavior: smooth; 
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #1a1a1a, #000);
+      background-color: #000;
+      color: #eaeaea;
+      overflow-x: hidden;
+      line-height: 1.6;
+      cursor: default;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* --- NAVIGATION --- */
+    .nav {
+      position: fixed;
+      width: 100%;
+      top: 24px;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      padding: 0 20px;
+      opacity: 0; /* Hidden initially for animation */
+      transform: translateY(-20px);
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      padding: 0 24px;
+    }
+
+    .nav-links a {
+      color: #888;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .resume-btn {
+      background: #fff;
+      color: #000;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .resume-btn:hover {
+      background: #e0e0e0;
+      transform: translateY(-1px);
+    }
+
+    /* --- HERO --- */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 60px;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: clamp(56px, 7vw, 96px);
+      line-height: 1.05;
+      font-weight: 600;
+      margin-bottom: 24px;
+      /* Subtle gradient text */
+      background: linear-gradient(to bottom right, #ffffff 30%, #999 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      max-width: 580px;
+      margin: 0 auto 80px; /* INCREASED FROM 40px TO 80px FOR MORE SPACE */
+      color: #999;
+      font-size: 18px;
+      font-weight: 300;
+      opacity: 0; /* Hidden initially for animation */
+      transform: translateY(20px);
+    }
+
+    /* --- SCROLL INDICATOR --- */
+    .scroll-indicator-wrapper {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      z-index: 10;
+      padding: 20px;
+      opacity: 0; /* Hidden for animation */
+    }
+
+    .scroll-indicator {
+      width: 26px;
+      height: 42px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .scroll-indicator:hover {
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    .scroll-indicator span {
+      display: block;
+      width: 4px;
+      height: 6px;
+      background: #fff;
+      border-radius: 4px;
+      margin: 8px auto;
+      animation: scrollDown 1.8s infinite ease-in-out;
+    }
+
+    @keyframes scrollDown {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(14px); opacity: 0; }
+    }
+
+    /* --- SECTIONS GLOBAL --- */
+    .section {
+      padding: 120px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 80px;
+      opacity: 0; /* JS Animation */
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: #666;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .section-heading {
+      font-size: 32px;
+      font-weight: 500;
+    }
+
+    /* --- WORK CARDS --- */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 40px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      opacity: 0; /* JS Animation */
+      transform: translateY(30px);
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .card-image-wrapper {
+      height: 260px;
+      width: 100%;
+      background: #111;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+      opacity: 0.8;
+    }
+
+    .card:hover .card-image {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+
+    .card-content {
+      padding: 32px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .arrow-icon {
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s ease;
+      color: #fff;
+    }
+
+    .card:hover .arrow-icon {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card p {
+      color: #888;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    
+    .card-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 12px;
+        font-size: 11px;
+        color: #ccc;
+        margin-bottom: 12px;
+        align-self: flex-start;
+    }
+
+    /* --- ABOUT (NEW SPLIT SECTION) --- */
+    .about-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-image-col {
+      position: relative;
+      opacity: 0; /* JS Animation */
+      transform: translateX(-30px);
+    }
+
+    .about-image {
+      width: 100%;
+      max-width: 450px;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      border-radius: 24px;
+      /* Image Filters for "old photo" feel */
+      filter: grayscale(100%) sepia(0.2) contrast(1.1) brightness(0.9);
+      transition: filter 0.5s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .about-image:hover {
+      filter: grayscale(0%) sepia(0) contrast(1) brightness(1); /* Full color on hover */
+    }
+    
+    /* Custom texture overlay using pseudo-element */
+    .about-image-col::after {
+        content: '';
         position: absolute;
-        width: 0%;
-        height: 2px;
-        background-color: #0d6efd;
+        top: 0;
         left: 0;
-        bottom: -4px;
-        transition: 0.3s ease;
-      }
-
-      .nav-link:hover::after {
         width: 100%;
-      }
+        height: 100%;
+        max-width: 450px;
+        border-radius: 24px;
+        /* Subtle noise texture using gradient */
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj4KICA8ZmlsdGVyIGlkPSJuIj4KICAgIDxmZXR1cmVOb2lzZSB0eXBlPSJmcmFjdGFsVHVyYnVsZW5jZSIgYmFzZUZyZXF1ZW5jeT0iMSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPgogICAgPGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIgcmVzdWx0PSJzYXR1cmFhdGlvbiIvPgogIDwvZmlsdGVyPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InRyYW5zcGFyZW50IiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuMDMiLz4KPC9zdmc+');
+        pointer-events: none;
+        mix-blend-mode: soft-light;
+        transition: opacity 0.5s ease;
+    }
 
-      .section-title {
-        font-size: 1.6rem;
-        font-weight: 600;
-        margin-bottom: 20px;
-      }
+    .about-text-col {
+      opacity: 0; /* JS Animation */
+      transform: translateX(30px);
+      padding-top: 20px;
+    }
 
-      .badge {
-        font-size: 0.9rem;
-        padding: 0.6em 0.9em;
-      }
+    .about-text-col h3 {
+      font-size: 32px;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
 
-      @media (max-width: 768px) {
-        .section-title {
-          font-size: 1.4rem;
+    .about-text-col p {
+      color: #999;
+      font-size: 16px;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+    
+    .skills-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 32px;
+    }
+    
+    .skill-pill {
+        padding: 8px 16px;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 100px;
+        color: #ccc;
+        font-size: 14px;
+        transition: all 0.2s;
+        cursor: default;
+    }
+    
+    .skill-pill:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: #fff;
+        color: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .about-wrapper {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .about-image-col {
+        order: -1;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    /* --- JOURNEY / EXPERIENCE SECTION --- */
+    .experience-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .exp-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 40px 0;
+      transition: background 0.3s;
+      opacity: 0; /* JS Animation */
+    }
+    
+    .exp-item:first-child {
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .exp-main h4 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .exp-main p {
+      color: #888;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .doc-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #fff;
+        border-bottom: 1px solid #fff;
+        padding-bottom: 2px;
+        margin-top: 8px;
+    }
+    
+    .doc-link:hover {
+        opacity: 0.8;
+    }
+
+    .exp-meta {
+      text-align: right;
+      min-width: 140px;
+    }
+
+    .exp-meta span {
+      display: block;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    @media (max-width: 768px) {
+        .exp-item {
+            flex-direction: column;
+            gap: 16px;
         }
-      }
-    </style>
-  </head>
+        .exp-meta {
+            text-align: left;
+        }
+    }
 
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light px-3 sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="index.html">
-      <span class="navbar-brand-outline">VR</span>
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item mx-2">
-          <a class="nav-link" href="./About Me/About.html">About</a>
-        </li>
-        <li class="nav-item mx-2">
-          <a
-            class="nav-link"
-            href="#"
-            onclick="alert('Interests section is under construction!')"
-            >Interests</a
-          >
-        </li>
-        <li class="nav-item mx-2">
-          <a class="nav-link" href="./Projects.html">Projects</a>
-        </li>
-        <li class="nav-item mx-2 d-lg-none">
-          <!-- Visible only on small screens -->
-          <a class="nav-link" href="./contact.html">Let's Connect</a>
-        </li>
-      </ul>
-      <div class="d-none d-lg-block ms-auto">
-        <!-- Visible only on large screens -->
-        <a class="nav-link" href="./contact.html">Let's Connect</a>
+    /* --- CONTACT & FOOTER --- */
+    .contact-section {
+      text-align: center;
+      padding-bottom: 80px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .contact-btn {
+      padding: 16px 32px;
+      border-radius: 50px;
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .contact-btn:hover {
+      transform: scale(1.05);
+      background: #e0e0e0;
+    }
+    
+    .contact-btn.outline {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+    }
+    
+    .contact-btn.outline:hover {
+        border-color: #fff;
+        background: transparent;
+    }
+
+    /* --- FOOTER FIXES --- */
+    .footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 40px 24px; /* Added horizontal padding for section padding consistency */
+      max-width: 1200px; /* Aligns content with sections */
+      margin: 0 auto; /* Centers the footer content */
+      color: #444;
+      font-size: 14px;
+      /* FIX: Use Flexbox for centering the single item */
+      display: flex;
+      justify-content: center; /* Changed from space-between to center */
+      align-items: center;
+      text-align: center; /* Ensures text (if any) is centered */
+    }
+    
+    .footer-right img {
+        height: 75px;
+        opacity: 1;
+        display: block;
+    }
+    
+    @media (max-width: 600px) {
+        .footer {
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+        }
+        /* Removed .footer-left and .footer-right ordering rules */
+    }
+    /* --- END FOOTER FIXES --- */
+    
+    /* --- BACK TO TOP BUTTON --- */
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #fff;
+        color: #000;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
+        z-index: 999;
+    }
+
+    .back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .back-to-top:hover {
+        transform: translateY(-2px) scale(1.05);
+    }
+    
+    @media (max-width: 600px) {
+        .back-to-top {
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-center">
+      <div class="nav-links">
+        <!-- These links are now handled by JS for smooth scroll -->
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <!-- Resume Button linked to local file -->
+      <a href="./assets/Resume.pdf" target="_blank" class="resume-btn">
+        <span>Resume</span>
+        <i data-lucide="arrow-up-right" width="14" height="14"></i>
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <!-- Title text is here, but JS will split it into words for animation -->
+      <h1 class="hero-title">
+        “Make it make sense.”
+      </h1>
+
+      <p class="hero-subtitle">
+        Crafting digital experiences that work quietly and feel memorable.
+      </p>
+    </div>
+
+    <!-- CLICKABLE SCROLL INDICATOR -->
+    <div class="scroll-indicator-wrapper" id="scrollDownBtn">
+      <div class="scroll-indicator">
+        <span></span>
       </div>
     </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="section">
+    <div class="section-header">
+      <span class="section-title">Projects & Development</span>
+      <h2 class="section-heading">Crafting impact through design & code</h2>
+    </div>
+
+    <div class="work-grid">
+      <!-- UI/UX Projects -->
+
+        <!-- YZF R15M -->
+    <article class="card">
+  <div class="card-image-wrapper">
+    <video
+      class="card-image"
+      src="./assets/r15-hero.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      disablepictureinpicture <!-- ADDED THIS ATTRIBUTE -->
+    ></video>
   </div>
-</nav>
 
+  <div class="card-content">
+    <span class="card-badge">In-Development</span>
 
-    <!-- Main Content -->
-    <div class="container py-5">
-      <!-- Section: Bio -->
-      <div class="row align-items-center mb-5">
-        <div class="col-md-4 text-center mb-4 mb-md-0">
-          <img
-            src="./Assets/profile.jpeg"
-            class="img-fluid rounded-circle shadow"
-            alt="Venkat Ragavan"
-            style="max-height: 280px; object-fit: cover"
-          />
+    <h3>YZF R15M Landing Page Redesign
+      <i data-lucide="arrow-up-right" class="arrow-icon"></i>
+    </h3>
+
+    <p>
+      A frontend tribute to my favorite bike, focused on modern aesthetics,
+      interaction, and responsive behavior.
+    </p>
+  </div>
+</article>
+    
+      <article class="card">
+        <div class="card-image-wrapper">
+          <img src="./assets/srisun.jpg" alt="Srisun Tiles" class="card-image">
         </div>
-        <div class="col-md-8">
-          <h4>Hi, I'm Venkat Ragavan 👋</h4>
-          <p>
-            Skilled web developer with experience in building websites using
-            HTML, CSS, and JavaScript. Able to create clean, responsive designs
-            and add interactive features. Focused on writing good code and
-            creating user-friendly websites.
-          </p>
+        <div class="card-content">
+           <div>
+              <span class="card-badge">Web Design</span>
+              <h3>Srisun Tiles <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+              <p>Homepage design emphasizing visual hierarchy and strong brand presence.</p>
+           </div>
         </div>
-      </div>
+      </article>
 
-      <!-- Section: Education -->
-      <div class="mb-5">
-        <h3 class="section-title">🎓 Education</h3>
-        <ul>
-          <li>
-            <strong>B.E. Computer Science and Engineering</strong> – Kingston
-            Engineering College (Class Of 2023), Vellore<br />
-            CGPA: 8.88 / 10
-          </li>
-          <li><strong>XII Standard</strong> – Shrishti Vidyashram – 79.8%</li>
-          <li>
-            <strong>X Standard</strong> – Vidyaniketan Matric HR Sec School –
-            92.8%
-          </li>
-        </ul>
-      </div>
-
-      <!-- Section: Skills -->
-      <div class="mb-5">
-        <h3 class="section-title">💼 Skills</h3>
-        <ul class="list-inline">
-          <li class="list-inline-item badge bg-secondary m-1">HTML</li>
-          <li class="list-inline-item badge bg-secondary m-1">CSS</li>
-          <li class="list-inline-item badge bg-secondary m-1">Bootstrap</li>
-          <li class="list-inline-item badge bg-secondary m-1">JavaScript</li>
-          <li class="list-inline-item badge bg-secondary m-1">Git</li>
-          <li class="list-inline-item badge bg-secondary m-1">
-            Responsive Design
-          </li>
-        </ul>
-      </div>
-
-      <!-- Section: My Resume -->
-      <div class="mb-5">
-        <h3 class="section-title">📄 My Resume</h3>
-        <div class="row align-items-center">
-          <div class="col-md-6 text-center mb-3 mb-md-0">
-            <img
-              src="./Assets/Resume-preview.png"
-              class="img-fluid rounded shadow"
-              alt="Resume Preview"
-              style="filter: blur(6px); max-height: 400px"
-            />
-            <p class="text-muted mt-2">Blurred for preview purposes</p>
+      <article class="card">
+        <div class="card-image-wrapper">
+          <img src="./assets/illaram.jpg" alt="Illaram Matrimony" class="card-image">
+        </div>
+        <div class="card-content">
+          <div>
+              <span class="card-badge">UI/UX Design</span>
+              <h3>Illaram Matrimony <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+              <p>End-to-end UI UX design for a full scale matrimony platform, focusing on trust and ease of use.</p>
           </div>
-          <div class="col-md-6">
-            <p>
-              Want to explore my projects, education, and work experience in
-              detail? Feel free to download my resume below.
-            </p>
-            <a
-              href="./Assets/Resume.pdf"
-              target="_blank"
-              class="btn btn-primary mt-2"
-              download
-              >Download Resume (PDF)</a
-            >
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-image-wrapper">
+          <img src="./assets/rift.png" alt="RIFT Sneakers" class="card-image">
+        </div>
+        <div class="card-content">
+          <div>
+              <span class="card-badge">App Design</span>
+              <h3>RIFT Sneakers App <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+              <p>Passion product exploring high-end ecommerce interactions and bold branding.</p>
           </div>
+        </div>
+      </article>
+
+      <!-- Development Projects -->
+      
+       <!-- Car Resale Value Prediction -->
+      <article class="card">
+        <div class="card-image-wrapper">
+          <img src="./assets/gtr.jpg" alt="Car Value Prediction" class="card-image">
+        </div>
+        <div class="card-content">
+          <div>
+              <span class="card-badge">Development</span>
+              <h3>Car Value Prediction <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+              <p>Predictive modeling techniques to forecast car resale values with high accuracy.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Stock Dashboard -->
+      <article class="card">
+        <div class="card-image-wrapper">
+          <img src="./assets/stocks.jpg" alt="Stock Dashboard" class="card-image">
+        </div>
+        <div class="card-content">
+          <div>
+              <span class="card-badge">Development</span>
+              <h3>Stock Dashboard <i data-lucide="arrow-up-right" class="arrow-icon"></i></h3>
+              <p>Interactive dashboard for stock visualization and forecasting indicators.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION (NEW) -->
+  <section id="about" class="section">
+    <div class="section-header">
+      <span class="section-title">About Me</span>
+    </div>
+    
+    <div class="about-wrapper">
+      <div class="about-image-col">
+        <!-- Profile image is now styled for a vintage, paper-like feel -->
+        <img src="./assets/profile.jpeg" alt="Venkat Ragav" class="about-image">
+      </div>
+      
+      <div class="about-text-col">
+        <h3>Building the gap between <br><span style="color:#fff">Logic</span> and <span style="color:#fff">Design</span>.</h3>
+        
+        <p>I began with a strong foundation in Computer Science and web development, understanding the constraints and possibilities of how interfaces are actually built.</p>
+        
+        <p>After a period of focused preparation for competitive exams (UPSC), I realized my true interest lay in the intersection of technology and creativity. I pivoted to pursue UI/UX professionally, where I now bridge the gap between clean code and thoughtful design.</p>
+        
+        <div class="skills-wrapper">
+          <span class="skill-pill">Figma</span>
+          <span class="skill-pill">UI/UX Design</span>
+          <span class="skill-pill">HTML/CSS</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">Bootstrap</span>
+          <span class="skill-pill">Wireframing</span>
+          <span class="skill-pill">Prototyping</span>
+          <span class="skill-pill">GitHub</span>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Footer -->
-    <footer class="text-center py-4 mt-5 bg-light">
-      <div class="container">
-        <p class="mb-1 fw-semibold text-muted" style="letter-spacing: 0.5px">
-          © Venkat Ragav<span style="font-size: 1.2rem">™</span>
-        </p>
+  <!-- JOURNEY / EXPERIENCE -->
+  <section id="experience" class="section">
+    <div class="section-header">
+      <span class="section-title">Journey & Experience</span>
+      <h2 class="section-heading">Professional History</h2>
+    </div>
+
+    <div class="experience-list">
+      <div class="exp-item">
+        <div class="exp-main">
+          <h4>UI UX Design Intern</h4>
+          <p>Working on live client projects, refining interfaces through iterative feedback loops, and maintaining design systems in Figma.</p>
+          <!-- Internship Doc Link -->
+          <a href="./assets/Internship_Doc.pdf" target="_blank" class="doc-link">
+            View Document <i data-lucide="file-text" width="14" height="14"></i>
+          </a>
+        </div>
+        <div class="exp-meta">
+          <span>Zop Technologies</span>
+          <span>Oct 2025 – Present</span>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-main">
+          <h4>TNSDC SkillUp Program</h4>
+          <p>Advanced web development specialization under the Vetri Nitchyam Scheme, graduating with distinction.</p>
+          <!-- Certificate Link -->
+          <a href="./assets/Certificate.pdf" target="_blank" class="doc-link">
+            View Certificate <i data-lucide="file-text" width="14" height="14"></i>
+          </a>
+        </div>
+        <div class="exp-meta">
+          <span>TNSDC</span>
+          <span>Completed (80%)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section contact-section">
+    <div class="section-header">
+      <span class="section-title">Get in Touch</span>
+      <h2 class="section-heading" style="font-size: 48px;">Let's build something<br>memorable.</h2>
+    </div>
+
+    <div class="contact-links">
+      <a href="mailto:venkatragav2207@gmail.com" class="contact-btn">Email Me</a>
+      <a href="https://linkedin.com/in/venkatragav" target="_blank" class="contact-btn outline">LinkedIn</a>
+      <a href="#" id="contactBtn" class="contact-btn outline">Call me</a>
+      <a href="https://github.com/VenkatRagav-22" target="_blank" class="contact-btn outline">GitHub</a>
+      <a href="https://instagram.com/venkatragav" target="_blank" class="contact-btn outline">Instagram</a>
+    </div>
+  </section>
+
+   <!-- FOOTER -->
+   <!-- Updated footer to remove text and center the logo -->
+    <footer class="footer">
+      <!-- Removed footer-left content. Keeping footer-right wrapper for minimal CSS changes. -->
+      <div class="footer-right">
+        <!-- Logo/Signature Image -->
+        <img src="./assets/logo.png" alt="Signature Logo" onerror="this.onerror=null;this.style.display='none';">
       </div>
     </footer>
+  
+  <!-- BACK TO TOP BUTTON -->
+  <div id="backToTopBtn" class="back-to-top" onclick="scrollToTop()">
+    <i data-lucide="arrow-up" width="24" height="24"></i>
+  </div>
 
-    <!-- Bootstrap JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
-    ></script>
-  </body>
+
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // Register GSAP Plugins
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+    
+    const FIXED_NAV_HEIGHT = 80;
+
+    // --- UTILITY: Function to split text into words and wrap them for animation ---
+    function splitTextToSpans(selector) {
+        const element = document.querySelector(selector);
+        if (!element) return [];
+        
+        // Replace <br> tags with a space so they don't break the word splitting
+        const text = element.innerHTML.replace(/<br>/g, ' '); 
+        
+        // Split text by space and filter out empty strings
+        let words = text.trim().split(/\s+/);
+
+        // Wrap each word in two spans: outer for clipping (overflow: hidden), inner for animation (transform: translateY)
+        let newHTML = words.map(word => 
+            `<span style="display: inline-block; overflow: hidden;"><span style="display: block; transform: translateY(100%);">${word}</span></span>`
+        ).join(' ');
+        
+        element.innerHTML = newHTML;
+        
+        // Return the inner span elements that will be animated (the ones with translateY)
+        return element.querySelectorAll('.hero-title > span > span');
+    }
+
+    // --- FIX 1: Smooth Scrolling for Navigation Links ---
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            
+            gsap.to(window, { 
+                duration: 1, 
+                scrollTo: {
+                    y: targetId,
+                    offset: FIXED_NAV_HEIGHT 
+                }, 
+                ease: "power2.inOut" 
+            });
+        });
+    });
+
+    // --- ANIMATIONS ---
+
+    // 2. Hero Title Staggered Reveal Animation
+    const heroTitleWords = splitTextToSpans(".hero-title");
+
+    // Increased duration and stagger for a cinematic feel
+    const heroTl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+    // 1. Initial delay for dramatic pause
+    heroTl.delay(0.8); 
+    
+    // 2. Stagger animation for the words (gliding up slowly, with slight rotation for motion)
+    if (heroTitleWords.length > 0) {
+        heroTl.fromTo(heroTitleWords, {
+            y: "120%", // Start position (hidden below clip)
+            rotation: 2, // Slight rotation for added drama
+            opacity: 0
+        }, {
+            y: "0%", // End position
+            rotation: 0,
+            opacity: 1,
+            duration: 1.5, // Slow duration
+            stagger: 0.1, // Increased stagger delay
+        });
+    }
+
+    // 3. Subtitle Reveal (Slower Fade-in/Up)
+    heroTl.fromTo(".hero-subtitle", 
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, 
+        "-=0.8" // Overlap with the end of the title animation
+    );
+
+    // 4. Navbar Reveal (Starts slightly before the main title animation finishes)
+    heroTl.to(".nav", {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power3.out"
+    }, "-=1.0"); // Overlap with the main title sequence
+
+    // 5. Scroll Indicator Fade In
+    heroTl.fromTo("#scrollDownBtn", 
+        { opacity: 0 },
+        { opacity: 1, duration: 1.5 }, 
+        "-=0.6" // Overlap further
+    );
+          
+    // 6. Scroll Down Functionality (Updated to use GSAP for smoothness)
+    document.getElementById('scrollDownBtn').addEventListener('click', () => {
+      gsap.to(window, { 
+          duration: 1, 
+          scrollTo: {
+              y: "#work",
+              offset: FIXED_NAV_HEIGHT
+          }, 
+          ease: "power2.inOut" 
+      });
+    });
+
+    // 7. Section Headers Reveal (Kept same for consistency)
+    gsap.utils.toArray('.section-header').forEach(header => {
+      gsap.fromTo(header, 
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: header,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+
+    // 8. Card Stagger Animation (Kept same for consistency)
+    gsap.utils.toArray('.card').forEach((card, i) => {
+      gsap.fromTo(card, 
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: i * 0.1, // Stagger effect
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+          }
+        }
+      );
+    });
+
+    // 9. Text/List Reveal (Kept same for consistency)
+    const revealElements = gsap.utils.toArray('.exp-item, .about-text-col, .about-image-col');
+    revealElements.forEach(el => {
+      gsap.fromTo(el, 
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+          }
+        }
+      );
+    });
+    
+    // 10. Back to Top Functionality
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    
+    function scrollToTop() {
+      gsap.to(window, { duration: 1, scrollTo: 0, ease: "power2.inOut" });
+    }
+    
+    // Show/Hide Back to Top button based on scroll position
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+
+    // phone redirect
+    const phoneNumber = "8667076522";
+  const contactBtn = document.getElementById("contactBtn");
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  contactBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    if (isMobile) {
+      window.location.href = "https://wa.me/91" + phoneNumber;
+    } else {
+      navigator.clipboard.writeText(phoneNumber).then(() => {
+        contactBtn.innerText = "Number copied";
+        setTimeout(() => {
+          contactBtn.innerText = "Call me";
+        }, 2000);
+      });
+    }
+  });
+
+  </script>
+</body>
 </html>
